@@ -1,0 +1,54 @@
+version: "3"
+services:
+  app:
+    hostname: webapp
+    container_name: webapp
+    depends_on:
+      - mongo
+    build:
+      context: app/
+    expose:
+    - 8080
+    ports:
+    - 8080:8080
+    volumes:
+      - /home/ypet/code/project/mfsp/mfsp/server/app/server:/app
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "2048k"
+        max-file: "4"
+    networks:
+      ftnet:
+        ipv4_address: 172.22.0.3
+
+  mongo:
+    hostname: mongo
+    container_name: localmongo
+    build:
+      context: bd/
+    env_file:
+    - all_env.env
+    #environment:
+    #- questionsCollection= "{ x: 1 }"
+    #- userCollection= "{ y: 1 }"
+    expose:
+    - 27017
+    ports:
+    - 27012:27017
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "2048k"
+        max-file: "4"
+    networks:
+      ftnet:
+        ipv4_address: 172.22.0.2
+
+networks:
+  ftnet:
+    ipam:
+      config:
+      - subnet: 172.22.0.0/24
