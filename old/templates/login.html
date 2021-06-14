@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block a %}
+<div class="qwestion">
+	<form  action = "http://localhost:8080/login" method = "post">
+
+	 <input  type="text" name="name" placeholder="Name" size="26">
+
+	 <input  typy="password" name="password" placeholder="Passsword" size="26">
+
+	  <button class="buttony">Sign Up</button>
+	</form>
+	  <p>{{name}}</p>
+	  <p>{{password}}</p>
+</div>
+{% endblock %}

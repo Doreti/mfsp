@@ -1,0 +1,25 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="static/style1.css" type="text/css", v=1>
+    {% if title %}
+    <title>{{title}} - microblog</title>
+    {% else %}
+    <title>microblog</title>
+    {% endif %}
+  </head>
+  <body class="main">
+    
+    <div class="flex">
+
+      <a class="free_lines" href="/"></a>
+      
+      <div class="item"> {% block a %}  {% endblock %}</div>
+      
+      <form method="get" action="login">
+        <button class="reg_button">Login</button>
+      </form>
+    
+      
+    </div>
+  </body>
+</html>

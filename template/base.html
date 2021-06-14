@@ -1,0 +1,36 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="style1.css" type="text/css">
+    {% if title %}
+    <title>{{title}} - microblog</title>
+    {% else %}
+    <title>microblog</title>
+    {% endif %}
+  </head>
+  <body>
+    
+    <div class="flex">
+      
+      <div class="item"> {% block content %}{% endblock %}</div>
+  
+      <button class="reg_button">Login</button>
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+    <div>Microblog: <a href="/index">Home</a></div>
+    <hr>
+    {% block content %}{% endblock %}
+  </body>
+</html>

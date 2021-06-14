@@ -1,5 +1,7 @@
 FROM mongo:4.0-xenial
 WORKDIR /settings
 COPY scripts/setting.js /settings
-EXPOSE 27017
+EXPOSE 27017 
 #CMD [ "mongo < setting.js" ]
+#db.questions.insertOne(${questionsCollection})
+#db.users.insertOne(${userCollection})

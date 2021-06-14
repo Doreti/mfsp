@@ -1,0 +1,16 @@
+.flex{
+	display: flex;
+}
+.item{
+	border: 4px solid yellow;
+	margin: auto;
+	width: 400px;  /* Или что угодно */
+    height: 550px;
+    margin-top:10%;
+}
+.reg_button{
+	width: 100px;  /* Или что угодно */
+    height: 50px;
+	margin-right:2%;
+
+}

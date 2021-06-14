@@ -9,8 +9,10 @@ services:
       context: app/
     expose:
     - 8080
+    - 5000
     ports:
     - 8080:8080
+    - 5000:5000
     volumes:
       - /home/ypet/code/project/mfsp/mfsp/server/app/server:/app
     restart: always
