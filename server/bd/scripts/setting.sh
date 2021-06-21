@@ -2,11 +2,7 @@
 echo $teest
 mongo << EOF
 use mfspbd
-db.user.insertOne({$teest})
+db.user.insertOne({$userCollection})
 EOF
-
-
-
-
 
 

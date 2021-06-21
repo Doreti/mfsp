@@ -1,0 +1,8 @@
+.flex{
+	display: flex;
+	
+}
+.hard{
+	width: 100px;  /* Или что угодно */
+    height: 50px;
+}

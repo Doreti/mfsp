@@ -1,12 +1,18 @@
 from flask import Flask, render_template, request, url_for, redirect, session
 import pymongo
 import bcrypt
+
+
+#Const
+
+DBHOST = "172.22.0.2"
+DBPORT = 27017
 #set app as a Flask instance 
 app = Flask(__name__)
 #encryption relies on secret keys so they could be run
 app.secret_key = "testing"
 #connoct to your Mongo DB database
-client = pymongo.MongoClient("172.22.0.2", 27017)
+client = pymongo.MongoClient(DBHOST, DBPORT)
 
 #get the database name
 db = client.get_database('total_records')
@@ -111,6 +117,10 @@ def admin_console():
         return render_template('admin.html')
     else:
         return redirect(url_for("login"))
+@app.route("/hardlvl", methods=["POST", "GET"])
+def lvl_page():
+    return render_template('hardlvl.html')
+
 @app.route("/test", methods=["POST", "GET"])
 def test_page():
     return render_template('test.html')
