@@ -3,13 +3,20 @@
 {% block content %}
 
 <div class="flex"> 
-	<form action="test.html">
-		<button type="submit" formaction="test" class="hard">Easy</button>
-		<button type="submit" formaction="test" class="hard">Medium</button>
-		<button type="submit" formaction="test" class="hard">HARD</button>
-		<button type="submit" formaction="test" class="hard">die or die</button>
+	<form method="post" action="test">
+		<button type="submit" name="marker" value="easy_question" class="hard">Easy</button>
+	</form>
+	<form method="post" action="test">
+		<button type="submit" name="marker" value="medium_question" class="hard">Medium</button>
+	</form>
+	<form method="post" action="test">
+		<button type="submit" name="marker" value="hard_question" class="hard">HARD</button>
+	</form>
+	<form method="post" action="test">
+		<button type="submit" name="marker" value="die"  class="hard">die or die</button>
 	</form>
 
+{{ marker }}
 
 </div>
 {% endblock %}

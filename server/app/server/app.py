@@ -1,10 +1,11 @@
 from flask import Flask, render_template, request, url_for, redirect, session
 import pymongo
 import bcrypt
-
-
+import json
+import random
+#########################################################
 #Const
-
+RANDOMQUSTION = []
 DBHOST = "172.22.0.2"
 DBPORT = 27017
 #set app as a Flask instance 
@@ -15,17 +16,31 @@ app.secret_key = "testing"
 client = pymongo.MongoClient(DBHOST, DBPORT)
 
 #get the database name
-db = client.get_database('total_records')
+#db = client.get_database('total_records')
 #get the particular collection that contains the data
-records = db.register
+#records = db.register
+#########################################################
 
-##assign URLs to have a particular route 
-#@app.route("/")
-#def base():
-#    return render_template('base1.html')
-    
+def get_qustion_from_db(level):
+    list_qustion = []
+    db = client.mfspbd
+    qus_collection = db.question
+    cursor = qus_collection.find({})
+    qustion_number = set()
+    while len(qustion_number) !=2:
+        qustion_number.add(random.randint(1,len(cursor[0][level])))
 
+    for i in qustion_number:
+     
+        list_qustion.append(cursor[0][level]['question' + str(i)])
 
+    #return cursor[0]['easy_question']
+
+    #return level
+    #return random.randint(0,100)
+    #return cursor[0]['easy_question']['question2']
+    #return cursor[0]['easy_question']
+    return list_qustion
 @app.route("/", methods=['post', 'get'])
 def index():
     message = ''
@@ -117,13 +132,68 @@ def admin_console():
         return render_template('admin.html')
     else:
         return redirect(url_for("login"))
+
 @app.route("/hardlvl", methods=["POST", "GET"])
 def lvl_page():
+    global RANDOMQUSTION
+    marker = 'easy_question'
+    #marker = request.form.get("marker")
+    RANDOMQUSTION = get_qustion_from_db(marker)
+
     return render_template('hardlvl.html')
+
 
 @app.route("/test", methods=["POST", "GET"])
 def test_page():
-    return render_template('test.html')
+    global RANDOMQUSTION
+    test2 = RANDOMQUSTION
+    spis = []
+
+   
+        #radio = request.args.get('buttonradio')
+    question = 'x'
+    answer0 = 'x'
+    answer1 = 'x'
+    answer2 = 'x'
+    answer3 = 'x'
+    k=0
+    while k !=2:
+        #radio = 'd'
+        radio = request.args.get('buttonradio')
+        
+        if radio == 'readyanswer':
+            radio = 's'
+            k = k + 1
+        else:
+            radio = 'e'
+            
+            
+    try: 
+        question = test2[0][0]
+
+    except IndexError:
+        question = 'some qustion'
+    try:
+        answer0 = test2[0][1][0]
+    except IndexError:
+        answer0 = 'some answer'
+    try:
+        answer1 = test2[0][2][0]
+    except IndexError:
+        answer1 = 'some answer'
+    try:
+        answer2 = test2[0][3][0]
+    except IndexError:
+        answer2 = 'some answer'
+    try:
+        answer3 = test2[0][4][0]
+    except IndexError:
+        answer3 = 'some answer'
+        
+        #spis.append(radio)
+
+
+    return render_template('test.html', question=question, answer0=answer0, answer1=answer1, answer2=answer2, answer3=answer3, spis=radio)
 
 
 
