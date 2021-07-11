@@ -3,8 +3,12 @@ import pymongo
 import bcrypt
 import json
 import random
+import time
 #########################################################
 #Const
+RESULT = []
+MAX_QUESTION = 6
+COUNT = 0
 RANDOMQUSTION = []
 DBHOST = "172.22.0.2"
 DBPORT = 27017
@@ -16,18 +20,69 @@ app.secret_key = "testing"
 client = pymongo.MongoClient(DBHOST, DBPORT)
 
 #get the database name
-#db = client.get_database('total_records')
+db = client.get_database('total_records')
 #get the particular collection that contains the data
-#records = db.register
+records = db.register
 #########################################################
+def ger_test():
+    global RESULT
+    global MAX_QUESTION
+    global RANDOMQUSTION
+    global COUNT
+    test2 = RANDOMQUSTION
+    result = []
+    if COUNT >= MAX_QUESTION:
+        COUNT = 0
+        
+        return COUNT
+    if request.method == "POST":
+        user_answer = request.form.get("answer")
+        try:
+            RESULT.append(test2[COUNT][int(user_answer)][1])
+        except TypeError:
+            RESULT.append(0)
+
+        #return redirect(url_for('lvl_page'))
+
+        
+    
+
+
+    try: 
+        result.append(test2[COUNT][0])
+
+    except IndexError:
+        result.append('s')
+    try:
+        result.append(test2[COUNT][1][0])
+    except IndexError:
+        result.append('s')
+    try:
+        result.append(test2[COUNT][2][0])
+    except IndexError:
+        result.append('s')
+    try:
+        result.append(test2[COUNT][3][0])
+    except IndexError:
+        result.append('s')
+    try:
+        result.append(test2[COUNT][4][0])
+    except IndexError:
+        result.append('s')
+    result.append(user_answer)
+    COUNT += 1
+    return result 
+
+    
 
 def get_qustion_from_db(level):
+    global MAX_QUESTION
     list_qustion = []
     db = client.mfspbd
     qus_collection = db.question
     cursor = qus_collection.find({})
     qustion_number = set()
-    while len(qustion_number) !=2:
+    while len(qustion_number) !=MAX_QUESTION:
         qustion_number.add(random.randint(1,len(cursor[0][level])))
 
     for i in qustion_number:
@@ -145,57 +200,38 @@ def lvl_page():
 
 @app.route("/test", methods=["POST", "GET"])
 def test_page():
-    global RANDOMQUSTION
-    test2 = RANDOMQUSTION
-    spis = []
+    my_result = ger_test()
+    if COUNT == 0:
+        return redirect(url_for('post_result'))
+    else:
+        return render_template('test.html', question=my_result[0], answer0=my_result[1], answer1=my_result[2], answer2=my_result[3], answer3=RESULT)
 
-   
-        #radio = request.args.get('buttonradio')
-    question = 'x'
-    answer0 = 'x'
-    answer1 = 'x'
-    answer2 = 'x'
-    answer3 = 'x'
-    k=0
-    while k !=2:
-        #radio = 'd'
-        radio = request.args.get('buttonradio')
-        
-        if radio == 'readyanswer':
-            radio = 's'
-            k = k + 1
+
+@app.route("/test1", methods=["POST", "GET"])
+def test_page1():
+    my_result = ger_test()    
+    if COUNT == 0:
+        return redirect(url_for('post_result'))
+    else:
+        return render_template('test.html', question=my_result[0], answer0=my_result[1], answer1=my_result[2], answer2=my_result[3], answer3=RESULT)
+@app.route("/result")
+def post_result():
+    right_answer = 0
+    bad_answer = 0
+
+    for i in RESULT:
+        if i == 0 or i =='None':
+            bad_answer += 1
         else:
-            radio = 'e'
+            right_answer += 1
+    
+    procent = (100 * int(right_answer))/MAX_QUESTION
+    RESULT.clear()
+
+    return render_template('result.html', allanswer=MAX_QUESTION , right_answer=right_answer , badanswer=bad_answer, procent=procent)
+
+
             
-            
-    try: 
-        question = test2[0][0]
-
-    except IndexError:
-        question = 'some qustion'
-    try:
-        answer0 = test2[0][1][0]
-    except IndexError:
-        answer0 = 'some answer'
-    try:
-        answer1 = test2[0][2][0]
-    except IndexError:
-        answer1 = 'some answer'
-    try:
-        answer2 = test2[0][3][0]
-    except IndexError:
-        answer2 = 'some answer'
-    try:
-        answer3 = test2[0][4][0]
-    except IndexError:
-        answer3 = 'some answer'
-        
-        #spis.append(radio)
-
-
-    return render_template('test.html', question=question, answer0=answer0, answer1=answer1, answer2=answer2, answer3=answer3, spis=radio)
-
-
 
 
 if __name__ == "__main__":
