@@ -42,31 +42,29 @@ def ger_test():
         except TypeError:
             RESULT.append(0)
 
-        #return redirect(url_for('lvl_page'))
-
-        
-    
-
-
+    random_number = set()
+    while len(random_number) !=4:
+        random_number.add(random.randint(1,4))
+    random_number = random.sample(random_number, len(random_number))
     try: 
         result.append(test2[COUNT][0])
 
     except IndexError:
         result.append('s')
     try:
-        result.append(test2[COUNT][1][0])
+        result.append(test2[COUNT][int(random_number[0])][0])
     except IndexError:
         result.append('s')
     try:
-        result.append(test2[COUNT][2][0])
+        result.append(test2[COUNT][int(random_number[1])][0])
     except IndexError:
         result.append('s')
     try:
-        result.append(test2[COUNT][3][0])
+        result.append(test2[COUNT][int(random_number[2])][0])
     except IndexError:
         result.append('s')
     try:
-        result.append(test2[COUNT][4][0])
+        result.append(test2[COUNT][int(random_number[3])][0])
     except IndexError:
         result.append('s')
     result.append(user_answer)
@@ -83,18 +81,13 @@ def get_qustion_from_db(level):
     cursor = qus_collection.find({})
     qustion_number = set()
     while len(qustion_number) !=MAX_QUESTION:
-        qustion_number.add(random.randint(1,len(cursor[0][level])))
+        qustion_number.add(random.randint(1,len(cursor[0][str(level)])))
 
     for i in qustion_number:
      
         list_qustion.append(cursor[0][level]['question' + str(i)])
 
-    #return cursor[0]['easy_question']
-
-    #return level
-    #return random.randint(0,100)
-    #return cursor[0]['easy_question']['question2']
-    #return cursor[0]['easy_question']
+  
     return list_qustion
 @app.route("/", methods=['post', 'get'])
 def index():
@@ -183,7 +176,40 @@ def logout():
 
 @app.route("/admin", methods=["POST", "GET"])
 def admin_console():
+    db = client.mfspbd
+    #qus_collection = db.question
+
     if "email" in session:
+        
+        if request.method == "POST":
+            level = request.form.get("level")
+            get_new_qustion = request.form.get("answer")
+            get_new_bad_answer0 = request.form.get("bad_answer0")
+            get_new_bad_answer1 = request.form.get("bad_answer1")
+            get_new_bad_answer2 = request.form.get("bad_answer2")
+            get_new_good_answer = request.form.get("good_answer")
+            if get_new_bad_answer0 == '' or get_new_bad_answer0 == '' or get_new_bad_answer1 == '' or get_new_bad_answer2 == '' or get_new_good_answer == '':
+                status = 'Данные введены не полностью'
+            else:
+                #db.question.insertOne()
+                qus_collection = db.question
+                cursor = qus_collection.find({})
+                #id_collection = cursor[0]['_id']
+                id_collection = 'easy_question'
+                
+                
+                status = 'Данные отправлены'
+             
+                status = 'Данные введены не полностью'
+                try:
+                    k = cursor[0]
+                    k[level]["question" + str(1 + len(cursor[0][level]))] = [get_new_qustion, [get_new_bad_answer0, 0.0], [get_new_bad_answer1, 0.0], [get_new_bad_answer2, 0.0], [get_new_good_answer, 1.0]]
+                    db.question.remove()
+                    db.question.insert_one(k)
+                    return render_template('admin.html', status=status)
+                except KeyError:
+                    #level = 'easy_question'
+                    return render_template('admin.html', status=status)
         return render_template('admin.html')
     else:
         return redirect(url_for("login"))
@@ -192,8 +218,14 @@ def admin_console():
 def lvl_page():
     global RANDOMQUSTION
     marker = 'easy_question'
-    #marker = request.form.get("marker")
-    RANDOMQUSTION = get_qustion_from_db(marker)
+    try:
+        marker = request.form.get("marker")
+        RANDOMQUSTION = get_qustion_from_db(marker)
+    except KeyError:
+        marker = 'easy_question'
+        RANDOMQUSTION = get_qustion_from_db(marker)
+        status = 'Данные введены не полностью'
+    
 
     return render_template('hardlvl.html')
 
@@ -236,3 +268,6 @@ def post_result():
 
 if __name__ == "__main__":
   app.run(host ='0.0.0.0', port = 5000,debug=True)
+  #while len(random_number) !=4:
+  #      random_number.add(random.randint(1,4))
+  #  random_number = random.sample(random_number, len(random_number))

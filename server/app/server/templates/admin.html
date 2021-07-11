@@ -1,5 +1,45 @@
 {% extends "base.html" %}
-{% block a %}
-<div class="admin"></div>>
-<p>admin<p>
+{% block content %}
+
+	<form action="" method="post">
+		<div class="form-group">
+	        <label for="answer">Выбери уровень</label>
+	        <select name="level">
+	        	<option selected name="level" value="easy_question">Easy</option>
+	        	<option name="level" value="medium_question">Medium</option>
+	        	<option name="level" value="hard_question">Hard</option>
+	        	
+	        </select>
+	        <small id="fullName" class="form-text text-muted">Please choose your level qustion)</small>
+	  	</div>
+		<div class="form-group">
+	        <label for="answer">Введи вопрос</label>
+	        <input name="answer" class="form-control" id="inputFullName" aria-describedby="emailHelp" placeholder="Enter your qustion">
+	        <small id="fullName" class="form-text text-muted">Please enter your qustion)</small>
+	  	</div>
+		
+		<div class="form-group">
+	        <label for="bad_answer0">Введи вариант неверный вариант ответа</label>
+	        <input name="bad_answer0" class="form-control" id="inputFullName" aria-describedby="emailHelp" placeholder="Enter answer">
+	        <small id="fullName" class="form-text text-muted">Please enter your answer(Not correct)</small>
+	  	</div>
+		
+		<div class="form-group">
+	        <label for="bad_answer1">Введи вариант неверный вариант ответа</label>
+	        <input name="bad_answer1" class="form-control" id="inputFullName" aria-describedby="emailHelp" placeholder="Enter answer">
+	        <small id="fullName" class="form-text text-muted">Please enter your answer(Not correct)</small>
+	  	</div>
+		div class="form-group">
+	        <label for="bad_answer2">Введи вариант неверный вариант ответа</label>
+	        <input name="bad_answer2" class="form-control" id="inputFullName" aria-describedby="emailHelp" placeholder="Enter answer">
+	        <small id="fullName" class="form-text text-muted">Please enter your answer(Not correct)</small>
+	  	</div>
+		<div class="form-group">
+	        <label for="good_answer">Введи вариант верный вариант ответа</label>
+	        <input name="good_answer" class="form-control" id="inputFullName" aria-describedby="emailHelp" placeholder="Enter answer">
+	        <small id="fullName" class="form-text text-muted">Please enter your answer(Correct)</small>
+	  	</div>
+		<button type="submit" class="btn btn-primary">Загрузить</button>
+	</form>
+	{{status}}
 {% endblock %}
