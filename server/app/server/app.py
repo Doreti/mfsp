@@ -26,6 +26,12 @@ db = client.get_database('total_records')
 #get the particular collection that contains the data
 records = db.register
 #########################################################
+def get_user_from_bd():
+    users_spis = []
+    
+    users = records.find({})
+
+    return users
 def timedelta(): 
     start = datetime.datetime.today()
     print("Hi, you are customer ",num) 
@@ -225,9 +231,21 @@ def admin_console():
                     #level = 'easy_question'
                     #status = 'Данные введены не полностью'
                     return render_template('admin.html', status=status)
-        return render_template('admin.html', status=status)
+        return render_template('admin.html')
     else:
         return redirect(url_for("login"))
+@app.route("/admin_user", methods=["POST", "GET"])
+def admin_user():
+    users = get_user_from_bd()
+    if request.method == "POST":
+        try:
+            user = request.form.get("user")
+            records.remove({"name":str(user)})
+            status = 'dsikj'
+            return render_template('admin_user.html', users=users, user=user)
+        except KeyError:
+            status = 'не вышло'
+    return render_template('admin_user.html', users=users, user=user)
 
 @app.route("/hardlvl", methods=["POST", "GET"])
 def lvl_page():
@@ -251,12 +269,7 @@ def test_page():
     if COUNT == 0:
         return redirect(url_for('post_result'))
     else:
-        t1 = threading.Thread(target = timedelta)
-        t1.start()
-        while t1.isAlive():
-
-            return render_template('test.html', question=my_result[0], answer0=my_result[1], answer1=my_result[2], answer2=my_result[3], answer3=RESULT)
-        return redirect(url_for('test_page1'))
+        return render_template('test.html', question=my_result[0], answer0=my_result[1], answer1=my_result[2], answer2=my_result[3], answer3=RESULT)
         
 
 

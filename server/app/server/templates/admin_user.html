@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+	
+	<form method="post">
+		<div class="form-group">
+	        <label for="answer">Выбери пользователя</label>
+	        <select name="user">
+	        	{% for post in users %}
+	   			<option selected value={{post['name']}}>{{post['name']}}</option>
+	   			{% endfor %}
+	        	
+	        	
+	        </select>
+	        <button type="submit" class="btn btn-primary">Удалить</button>
+	</form>
+	
+
+	
+{% endblock %}
+	
