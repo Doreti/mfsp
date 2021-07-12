@@ -15,7 +15,27 @@
   
     {{spis}}
 
+ <b><span id="time"></span></b>
 
+	<script type="text/javascript">
+
+	var i = 25;//время в сек.
+
+	function time(){
+
+	 document.getElementById("time").innerHTML = i;//визуальный счетчик
+
+	 i--;//уменьшение счетчика
+
+	 if (i < 0) location.href = "test";//редирект
+
+	}
+
+	time();
+
+	setInterval(time, 1000);
+
+	</script>
 
 
 

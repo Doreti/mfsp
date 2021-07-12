@@ -4,6 +4,8 @@ import bcrypt
 import json
 import random
 import time
+import threading
+import datetime
 #########################################################
 #Const
 RESULT = []
@@ -24,6 +26,16 @@ db = client.get_database('total_records')
 #get the particular collection that contains the data
 records = db.register
 #########################################################
+def timedelta(): 
+    start = datetime.datetime.today()
+    print("Hi, you are customer ",num) 
+    then = datetime.datetime.now()
+    #k = datetime.datetime.today()
+    delta = datetime.datetime.now() - then
+    while delta.seconds != 20:
+        now = datetime.datetime.now()
+        delta = now - then
+
 def ger_test():
     global RESULT
     global MAX_QUESTION
@@ -41,6 +53,8 @@ def ger_test():
             RESULT.append(test2[COUNT][int(user_answer)][1])
         except TypeError:
             RESULT.append(0)
+    else: 
+        user_answer = 0
 
     random_number = set()
     while len(random_number) !=4:
@@ -200,7 +214,7 @@ def admin_console():
                 
                 status = 'Данные отправлены'
              
-                status = 'Данные введены не полностью'
+                
                 try:
                     k = cursor[0]
                     k[level]["question" + str(1 + len(cursor[0][level]))] = [get_new_qustion, [get_new_bad_answer0, 0.0], [get_new_bad_answer1, 0.0], [get_new_bad_answer2, 0.0], [get_new_good_answer, 1.0]]
@@ -209,8 +223,9 @@ def admin_console():
                     return render_template('admin.html', status=status)
                 except KeyError:
                     #level = 'easy_question'
+                    #status = 'Данные введены не полностью'
                     return render_template('admin.html', status=status)
-        return render_template('admin.html')
+        return render_template('admin.html', status=status)
     else:
         return redirect(url_for("login"))
 
@@ -236,7 +251,13 @@ def test_page():
     if COUNT == 0:
         return redirect(url_for('post_result'))
     else:
-        return render_template('test.html', question=my_result[0], answer0=my_result[1], answer1=my_result[2], answer2=my_result[3], answer3=RESULT)
+        t1 = threading.Thread(target = timedelta)
+        t1.start()
+        while t1.isAlive():
+
+            return render_template('test.html', question=my_result[0], answer0=my_result[1], answer1=my_result[2], answer2=my_result[3], answer3=RESULT)
+        return redirect(url_for('test_page1'))
+        
 
 
 @app.route("/test1", methods=["POST", "GET"])
